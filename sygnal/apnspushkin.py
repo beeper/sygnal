@@ -327,7 +327,7 @@ class ApnsPushkin(ConcurrencyLimitedPushkin):
                 )
 
                 if device.user_id and device.user_id.split(":")[0] in ["@brad", "@eric", "@blau"]:
-                    payload["aps"].setdefault("alert", {})["loc-key"] = f"{n.event_id} {n.room_id}"
+                    payload["aps"].setdefault("alert", {})["loc-key"] = f"BLANK NOTIFICATION DEBUG {n.event_id} {n.room_id}"
             else:
                 payload = self._get_payload_full(n, device, log)
 
