@@ -300,6 +300,9 @@ class ApnsPushkin(ConcurrencyLimitedPushkin):
                 payload: Optional[Dict[str, Any]] = self._get_payload_event_id_only(
                     n, default_payload
                 )
+
+                if device.user_id and device.user_id.split(":")[0] in ["@brad", "@eric", "@blau"]:
+                    payload["aps"].setdefault("alert", {})["loc-key"] = f"{n.event_id} {n.room_id}"
             else:
                 payload = self._get_payload_full(n, device, log)
 
