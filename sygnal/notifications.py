@@ -74,6 +74,8 @@ class Device:
         self.pushkey_ts: int = get_key(raw, "pushkey_ts", int, 0)
         self.data: Optional[Dict[str, Any]] = get_key(raw, "data", dict)
         self.tweaks = Tweaks(get_key(raw, "tweaks", dict, {}))
+        # Beeper: Save this additional information so we can do magic things for some users
+        self.user_id = raw["user_id"]
 
 
 class Counts:
