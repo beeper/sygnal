@@ -590,6 +590,10 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
                 body = {}
                 body["message"] = new_body
 
+            if data.get("type") == "com.beeper.asmux.websocket_wakeup":
+                log.info("Sending com.beeper.asmux.websocket_wakeup to %s with TTL 0", device.user_id)
+                body["time_to_live"] = 0
+
             for retry_number in range(0, MAX_TRIES):
                 # This has to happen inside the retry loop since `pushkeys` can be modified in the
                 # event of a failure that warrants a retry.
