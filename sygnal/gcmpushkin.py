@@ -366,7 +366,7 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
             body["data"] = data
             body["priority"] = "normal" if n.prio == "low" else "high"
 
-            if n.ttl:
+            if n.ttl is not None:
                 body["time_to_live"] = n.ttl
 
             if data.get("type") == "com.beeper.asmux.websocket_wakeup":
