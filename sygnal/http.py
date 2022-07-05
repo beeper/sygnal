@@ -270,6 +270,14 @@ class V1NotifyHandler(Resource):
                     "Sending push to pushkin %s for app ID %s", pushkin.name, appid
                 )
 
+                log.info(
+                    "Send push via %s userID=%s appID=%s eventID=%s",
+                    pushkin.name,
+                    d.user_id,
+                    appid,
+                    notif.event_id,
+                )
+
                 NOTIFS_BY_PUSHKIN.labels(pushkin.name).inc()
 
                 result = await pushkin.dispatch_notification(notif, d, context)
