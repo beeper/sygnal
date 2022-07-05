@@ -366,9 +366,16 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
             body["data"] = data
             body["priority"] = "normal" if n.prio == "low" else "high"
 
+            ttl = body.get("ttl")
+            if ttl:
+                body["time_to_live"] = ttl
+
             if data.get("type") == "com.beeper.asmux.websocket_wakeup":
-                log.info("Sending com.beeper.asmux.websocket_wakeup to %s with TTL 0", device.user_id)
-                body["time_to_live"] = 0
+                log.info(
+                    "Sending com.beeper.asmux.websocket_wakeup to %s with TTL %r",
+                    device.user_id,
+                    ttl,
+                )
 
             for retry_number in range(0, MAX_TRIES):
                 if len(pushkeys) == 1:
