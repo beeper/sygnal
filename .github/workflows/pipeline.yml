@@ -1,7 +1,7 @@
 name: Linting and Tests
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "beeper"]
   pull_request:
 
 jobs:
