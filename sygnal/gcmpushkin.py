@@ -313,6 +313,17 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
                             result["error"],
                         )
                         new_pushkeys.append(pushkeys[i])
+
+                # Beeper: debug GCM sends by logging eventId / messageID combintions
+                else:
+                    event_id = body["data"].get("event_id")
+                    message_id = result.get("message_id")
+                    log.info(
+                        "Sent GCM push for eventID=%s, gcmMessageId=%s",
+                        event_id,
+                        message_id,
+                    )
+
             return failed, new_pushkeys
         else:
             raise NotificationDispatchException(
