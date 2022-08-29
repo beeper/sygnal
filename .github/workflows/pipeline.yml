@@ -35,6 +35,8 @@ jobs:
     name: Unit tests
     needs: [check-code-style, check-types-mypy]
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: "."
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
