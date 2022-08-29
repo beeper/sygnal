@@ -23,11 +23,7 @@ jobs:
       - name: Docker Build
         uses: docker/build-push-action@v2
         with:
-          cache-from: ${{ env.CI_REGISTRY_IMAGE }}:latest
-          pull: true
+          context: .
           file: docker/Dockerfile
           tags: ${{ env.CI_REGISTRY_IMAGE }}:${{ github.sha }}
           push: true
-      - uses: beeper/docker-retag-push-latest@main
-        with:
-          image: ${{ env.CI_REGISTRY_IMAGE }}
