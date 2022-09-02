@@ -628,6 +628,9 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
                     n.event_id,
                 )
 
+                # Beeper: add sent timestamp to notification data payload
+                data["sent_at_timestamp"] = time.time()
+
                 try:
                     span_tags = {"retry_num": retry_number}
 
