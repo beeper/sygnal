@@ -398,6 +398,11 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
                     }
                 )
 
+            pushkey_to_device = {
+                device.pushkey: device
+                for device in n.devices
+            }
+
             # determine which pushkeys to retry or forget about
             new_pushkeys = []
             for i, result in enumerate(resp_object["results"]):
@@ -432,8 +437,11 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
                 else:
                     event_id = body["data"].get("event_id")
                     message_id = result.get("message_id")
+                    device = pushkey_to_device.get(puskeys[i])
                     log.info(
-                        "Sent GCM push for eventID=%s, gcmMessageId=%s",
+                        "Sent GCM push for userID=%s, appID=%s, eventID=%s, gcmMessageId=%s",
+                        device.user_id if device else None,
+                        device.app_id if device else None,
                         event_id,
                         message_id,
                     )
