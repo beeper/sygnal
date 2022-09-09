@@ -27,3 +27,4 @@ jobs:
           file: docker/Dockerfile
           tags: ${{ env.CI_REGISTRY_IMAGE }}:${{ github.sha }}
           push: true
+          platforms: linux/amd64,linux/arm64
