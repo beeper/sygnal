@@ -98,8 +98,14 @@ class Notification:
         self.user_is_target: Optional[bool] = notif.get("user_is_target")
         self.type: Optional[str] = notif.get("type")
         self.sender: Optional[str] = notif.get("sender")
-        self.ttl: Optional[int] = notif.get("ttl")
-        self.user_id: Optional[str] = notif.get("com.beeper.user_id")
+        # Beeper: Save this additional information so we can do magic things
+        # for some users
+        self.user_id: Optional[str] = notif.get("com.beeper.user_id") or notif.get(
+            "user_id"
+        )
+
+        # Beeper: TTL for the notification. Used for Android SMS.
+        self.ttl: Optional[int] = notif.get("com.beeper.ttl") or notif.get("ttl")
 
         if "devices" not in notif or not isinstance(notif["devices"], list):
             raise InvalidNotificationException("Expected list in 'devices' key")
@@ -110,6 +116,10 @@ class Notification:
             self.counts = Counts({})
 
         self.devices = [Device(d) for d in notif["devices"]]
+
+        # Beeper: legacy support for user_id in each device.
+        if not self.user_id and len(notif["devices"]) > 0:
+            self.user_id = notif["devices"][0].get("user_id")
 
 
 class Pushkin(abc.ABC):
