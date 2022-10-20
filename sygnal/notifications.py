@@ -82,6 +82,9 @@ class Counts:
     def __init__(self, raw: Dict[str, Any]):
         self.unread: Optional[int] = get_key(raw, "unread", int)
         self.missed_calls: Optional[int] = get_key(raw, "missed_calls", int)
+        self.beeper_server_type: Optional[str] = get_key(
+            raw, "com.beeper.server_type", str
+        )
 
 
 class Notification:

@@ -14,6 +14,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import asyncio
 import json
 import logging
 import sys
@@ -22,6 +23,7 @@ import traceback
 from typing import TYPE_CHECKING, Callable, List, Union
 from uuid import uuid4
 
+from aioredis import Redis
 from opentracing import Format, Span, logs, tags
 from prometheus_client import Counter, Gauge, Histogram
 from twisted.internet.defer import ensureDeferred
@@ -79,11 +81,17 @@ REQUESTS_IN_FLIGHT_GUAGE = Gauge(
     labelnames=["resource"],
 )
 
+BEEPER_SERVER_TYPE_OPPOSITES = {
+    "hungryserv": "synapse",
+    "synapse": "hungryserv",
+}
+
 
 class V1NotifyHandler(Resource):
     def __init__(self, sygnal: "Sygnal"):
         super().__init__()
         self.sygnal = sygnal
+        self.redis = Redis.from_url(sygnal.config["http"]["redis"])
 
     isLeaf = True
 
@@ -96,12 +104,14 @@ class V1NotifyHandler(Resource):
         return str(uuid4())
 
     def render_POST(self, request: Request) -> Union[int, bytes]:
-        response = self._handle_request(request)
+        response = asyncio.get_event_loop().run_until_complete(
+            self._handle_request(request)
+        )
         if response != NOT_DONE_YET:
             PUSHGATEWAY_HTTP_RESPONSES_COUNTER.labels(code=request.code).inc()
         return response
 
-    def _handle_request(self, request: Request) -> Union[int, bytes]:
+    async def _handle_request(self, request: Request) -> Union[int, bytes]:
         """
         Actually handle the request.
         Args:
@@ -174,6 +184,27 @@ class V1NotifyHandler(Resource):
                 log.warning(msg)
                 request.setResponseCode(400)
                 return msg.encode()
+
+            if notif.counts.beeper_server_type is None:
+                log.warning("No beeper_server_type in notification")
+            elif notif.user_id is None:
+                log.warning("No user_id in notification")
+            else:
+                unread = notif.counts.unread or 0
+
+                # The user ID should be the same for all devices.
+                redis_user_key = f"notification_count:{notif.user_id}"
+                redis_key = f"{redis_user_key}:{notif.counts.beeper_server_type}"
+                await self.redis.set(redis_key, unread)
+
+                opposite_redis_key = (
+                    redis_user_key
+                    + ":"
+                    + BEEPER_SERVER_TYPE_OPPOSITES[notif.counts.beeper_server_type]
+                )
+                opposite_count = await self.redis.get(opposite_redis_key) or 0
+                if opposite_redis_key is not None:
+                    notif.counts.unread = unread + int(opposite_count)
 
             root_span_accounted_for = True
 
