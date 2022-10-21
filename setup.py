@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+
 # Copyright 2014 OpenMarket Ltd
 # Copyright 2017 Vector Creations Ltd
 # Copyright 2019 The Matrix.org Foundation C.I.C.
