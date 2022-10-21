@@ -91,7 +91,8 @@ class V1NotifyHandler(Resource):
     def __init__(self, sygnal: "Sygnal"):
         super().__init__()
         self.sygnal = sygnal
-        self.redis = Redis.from_url(sygnal.config["http"]["redis"])
+        redis = sygnal.config.get("http", {}).get("redis")
+        self.redis = Redis.from_url(redis) if redis else None
 
     isLeaf = True
 
@@ -189,7 +190,7 @@ class V1NotifyHandler(Resource):
                 log.warning("No beeper_server_type in notification")
             elif notif.user_id is None:
                 log.warning("No user_id in notification")
-            else:
+            elif self.redis:
                 unread = notif.counts.unread or 0
 
                 # The user ID should be the same for all devices.
