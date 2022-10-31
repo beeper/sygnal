@@ -76,9 +76,6 @@ class Device:
         self.pushkey_ts: int = get_key(raw, "pushkey_ts", int, 0)
         self.data: Optional[Dict[str, Any]] = get_key(raw, "data", dict)
         self.tweaks = Tweaks(get_key(raw, "tweaks", dict, {}))
-        # Beeper: Save this additional information so we can do magic things
-        # for some users
-        self.user_id = raw.get("user_id")
 
 
 class Counts:
@@ -102,6 +99,7 @@ class Notification:
         self.type: Optional[str] = notif.get("type")
         self.sender: Optional[str] = notif.get("sender")
         self.ttl: Optional[int] = notif.get("ttl")
+        self.user_id: Optional[str] = notif.get("com.beeper.user_id")
 
         if "devices" not in notif or not isinstance(notif["devices"], list):
             raise InvalidNotificationException("Expected list in 'devices' key")

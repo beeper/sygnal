@@ -273,7 +273,7 @@ class V1NotifyHandler(Resource):
                 log.info(
                     "Send push via %s userID=%s appID=%s eventID=%s",
                     pushkin.name,
-                    d.user_id,
+                    notif.user_id,
                     appid,
                     notif.event_id,
                 )
