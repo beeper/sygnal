@@ -326,7 +326,7 @@ class ApnsPushkin(ConcurrencyLimitedPushkin):
                     n, default_payload
                 )
 
-                if device.user_id and device.user_id.split(":")[0] in [
+                if n.user_id and n.user_id.split(":")[0] in [
                     "@brad",
                     "@eric",
                     "@blau",

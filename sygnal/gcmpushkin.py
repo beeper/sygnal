@@ -440,7 +440,7 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
                             "Sent GCM push for "
                             "userID=%s, appID=%s, eventID=%s, gcmMessageId=%s"
                         ),
-                        device.user_id if device else None,
+                        n.user_id,
                         device.app_id if device else None,
                         event_id,
                         message_id,
@@ -615,7 +615,7 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
             if data.get("type") == "com.beeper.asmux.websocket_wakeup":
                 log.info(
                     "Sending com.beeper.asmux.websocket_wakeup to %s with TTL %r",
-                    device.user_id,
+                    n.user_id,
                     body.get("time_to_live"),
                 )
 
