@@ -14,13 +14,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import asyncio
 import json
 import logging
 import sys
 import time
 import traceback
-from typing import TYPE_CHECKING, Callable, List, Union
+from typing import TYPE_CHECKING, Callable, List, Union, cast
 from uuid import uuid4
 
 from aioredis import Redis
@@ -105,12 +104,10 @@ class V1NotifyHandler(Resource):
         return str(uuid4())
 
     def render_POST(self, request: Request) -> Union[int, bytes]:
-        response = asyncio.get_event_loop().run_until_complete(
-            self._handle_request(request)
-        )
+        response = ensureDeferred(self._handle_request(request))
         if response != NOT_DONE_YET:
             PUSHGATEWAY_HTTP_RESPONSES_COUNTER.labels(code=request.code).inc()
-        return response
+        return cast(Union[int, bytes], response.result)
 
     async def _handle_request(self, request: Request) -> Union[int, bytes]:
         """
