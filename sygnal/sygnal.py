@@ -285,7 +285,7 @@ def check_config(config: Dict[str, Any]) -> None:
             "The following configuration sections are not understood: %s", nonunderstood
         )
 
-    check_section("http", {"port", "bind_addresses"})
+    check_section("http", {"port", "bind_addresses", "redis"})
     check_section("log", {"setup", "access"})
     check_section(
         "access", {"file", "enabled", "x_forwarded_for"}, cfgpart=config["log"]
