@@ -22,9 +22,9 @@ import traceback
 from typing import TYPE_CHECKING, Any, Callable, List, Union, cast
 from uuid import uuid4
 
-from aioredis import Redis
 from opentracing import Format, Span, logs, tags
 from prometheus_client import Counter, Gauge, Histogram
+from redis import Redis
 from twisted.internet.defer import ensureDeferred
 from twisted.web import server
 from twisted.web.http import (
@@ -193,14 +193,14 @@ class V1NotifyHandler(Resource):
                 # The user ID should be the same for all devices.
                 redis_user_key = f"notification_count:{notif.user_id}"
                 redis_key = f"{redis_user_key}:{notif.counts.beeper_server_type}"
-                await self.redis.set(redis_key, unread)
+                self.redis.set(redis_key, unread)
 
                 opposite_redis_key = (
                     redis_user_key
                     + ":"
                     + BEEPER_SERVER_TYPE_OPPOSITES[notif.counts.beeper_server_type]
                 )
-                opposite_count = await self.redis.get(opposite_redis_key) or 0
+                opposite_count = self.redis.get(opposite_redis_key) or 0
                 if opposite_redis_key is not None:
                     notif.counts.unread = unread + int(opposite_count)
 
