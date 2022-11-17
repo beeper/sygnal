@@ -46,7 +46,7 @@ from sygnal.notifications import Pushkin
 logger = logging.getLogger(__name__)
 
 CONFIG_DEFAULTS: Dict[str, Any] = {
-    "http": {"port": 5000, "bind_addresses": ["127.0.0.1"]},
+    "http": {"port": 5000, "bind_addresses": ["127.0.0.1"], "redis": False},
     "log": {"setup": {}, "access": {"x_forwarded_for": False}},
     "metrics": {
         "prometheus": {"enabled": False, "address": "127.0.0.1", "port": 8000},
