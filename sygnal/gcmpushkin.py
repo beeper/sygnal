@@ -324,12 +324,13 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
                     log.info(
                         (
                             "Sent GCM push for "
-                            "userID=%s, appID=%s, eventID=%s, gcmMessageId=%s"
+                            "userID=%s, appID=%s, eventID=%s, gcmMessageId=%s, priority=%s"
                         ),
                         n.user_id if device else None,
                         device.app_id if device else None,
                         event_id,
                         message_id,
+                        "normal" if n.prio == "low" else "high"
                     )
 
             return failed, new_pushkeys
