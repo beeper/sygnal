@@ -110,6 +110,11 @@ class Notification:
         # Beeper: TTL for the notification. Used for Android SMS.
         self.ttl: Optional[int] = notif.get("com.beeper.ttl") or notif.get("ttl")
 
+        # Beeper: room ID when it's a counts-only notification
+        self.last_fully_read_room_id: Optional[str] = notif.get(
+            "com.beeper.last_fully_read_room_id"
+        )
+
         if "devices" not in notif or not isinstance(notif["devices"], list):
             raise InvalidNotificationException("Expected list in 'devices' key")
 
