@@ -612,6 +612,9 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
             if n.ttl is not None:
                 body["time_to_live"] = n.ttl
 
+            if n.last_fully_read_room_id is not None:
+                body["com.beeper.last_fully_read_room_id"] = n.last_fully_read_room_id
+
             if data.get("type") == "com.beeper.asmux.websocket_wakeup":
                 log.info(
                     "Sending com.beeper.asmux.websocket_wakeup to %s with TTL %r",

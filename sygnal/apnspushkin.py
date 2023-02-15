@@ -423,6 +423,8 @@ class ApnsPushkin(ConcurrencyLimitedPushkin):
             payload["room_id"] = n.room_id
         if n.event_id:
             payload["event_id"] = n.event_id
+        if n.last_fully_read_room_id:
+            payload["com.beeper.last_fully_read_room_id"] = n.last_fully_read_room_id
 
         if n.counts.unread is not None:
             payload["unread_count"] = n.counts.unread
