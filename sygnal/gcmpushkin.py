@@ -483,7 +483,6 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
             "sender_display_name",
             "content",
             "room_id",
-            "last_fully_read_room_id",
         ]:
             if hasattr(n, attr):
                 data[attr] = getattr(n, attr)
@@ -491,6 +490,10 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
                 # body is too long, GCM will reject it.
                 if data[attr] is not None and len(data[attr]) > MAX_BYTES_PER_FIELD:
                     data[attr] = data[attr][0:MAX_BYTES_PER_FIELD]
+
+        last_fully_read_room_id = getattr(n, "last_fully_read_room_id", None)
+        if last_fully_read_room_id:
+            data["com.beeper.last_fully_read_room_id"] = last_fully_read_room_id
 
         data["prio"] = "high"
         if n.prio == "low":
