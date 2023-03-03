@@ -27,7 +27,8 @@ _IGNORED_LOG_RECORD_ATTRIBUTES = {
     "asctime",
     "created",
     "exc_info",
-    # exc_text isn't a public attribute, but is used to cache the result of formatException.
+    # exc_text isn't a public attribute, but is used to cache the
+    # result of formatException.
     "exc_text",
     "filename",
     "funcName",
