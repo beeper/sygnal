@@ -735,7 +735,6 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
             "sender_display_name",
             "content",
             "room_id",
-            "last_fully_read_room_id",
         ]:
             if hasattr(n, attr):
                 data[attr] = getattr(n, attr)
@@ -760,6 +759,10 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
                         overflow_fields += 1
                     data["content_" + attr] = value
                 del data["content"]
+
+        last_fully_read_room_id = getattr(n, "last_fully_read_room_id", None)
+        if last_fully_read_room_id:
+            data["com.beeper.last_fully_read_room_id"] = last_fully_read_room_id
 
         data["prio"] = "high"
         if n.prio == "low":
