@@ -195,14 +195,19 @@ class V1NotifyHandler(Resource):
                 redis_key = f"{redis_user_key}:{notif.counts.beeper_server_type}"
                 self.redis.set(redis_key, unread)
 
-                opposite_redis_key = (
-                    redis_user_key
-                    + ":"
-                    + BEEPER_SERVER_TYPE_OPPOSITES[notif.counts.beeper_server_type]
-                )
+                opposite_server_type = BEEPER_SERVER_TYPE_OPPOSITES[
+                    notif.counts.beeper_server_type
+                ]
+                opposite_redis_key = f"{redis_user_key}:{opposite_server_type}"
                 opposite_count = self.redis.get(opposite_redis_key) or 0
                 if opposite_redis_key is not None:
                     notif.counts.unread = unread + int(opposite_count)
+
+                    log.info(
+                        f"Updating combined badge count for {notif.user_id}, "
+                        f"got {notif.counts.beeper_server_type}: {unread} "
+                        f"opposite {opposite_server_type}: {int(opposite_count)}"
+                    )
 
             root_span_accounted_for = True
 
@@ -300,11 +305,12 @@ class V1NotifyHandler(Resource):
                 )
 
                 log.info(
-                    "Send push via %s userID=%s appID=%s eventID=%s",
+                    "Send push via %s userID=%s appID=%s eventID=%s unreadBadge=%s",
                     pushkin.name,
                     notif.user_id,
                     appid,
                     notif.event_id,
+                    notif.counts.unread,
                 )
 
                 NOTIFS_BY_PUSHKIN.labels(pushkin.name).inc()
