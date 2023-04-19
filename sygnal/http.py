@@ -204,6 +204,10 @@ class V1NotifyHandler(Resource):
                 if opposite_redis_key is not None:
                     notif.counts.unread = unread + int(opposite_count)
 
+                log.info(
+                    f"Updating combined badge count for {notif.user_id}, got {notif.counts.beeper_server_type}: {unread} opposite {BEEPER_SERVER_TYPE_OPPOSITES[notif.counts.beeper_server_type]}: {opposite_count}"
+                )
+
             root_span_accounted_for = True
 
             async def cb():
@@ -300,11 +304,12 @@ class V1NotifyHandler(Resource):
                 )
 
                 log.info(
-                    "Send push via %s userID=%s appID=%s eventID=%s",
+                    "Send push via %s userID=%s appID=%s eventID=%s unreadBadge=%s",
                     pushkin.name,
                     notif.user_id,
                     appid,
                     notif.event_id,
+                    notif.counts.unread
                 )
 
                 NOTIFS_BY_PUSHKIN.labels(pushkin.name).inc()
