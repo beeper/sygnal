@@ -195,7 +195,9 @@ class V1NotifyHandler(Resource):
                 redis_key = f"{redis_user_key}:{notif.counts.beeper_server_type}"
                 self.redis.set(redis_key, unread)
 
-                opposite_server_type = BEEPER_SERVER_TYPE_OPPOSITES[notif.counts.beeper_server_type]
+                opposite_server_type = (
+                    BEEPER_SERVER_TYPE_OPPOSITES[notif.counts.beeper_server_type]
+                )
                 opposite_redis_key = f"{redis_user_key}:{opposite_server_type}"
                 opposite_count = self.redis.get(opposite_redis_key) or 0
                 if opposite_redis_key is not None:
