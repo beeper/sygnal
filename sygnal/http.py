@@ -204,9 +204,11 @@ class V1NotifyHandler(Resource):
                 if opposite_redis_key is not None:
                     notif.counts.unread = unread + int(opposite_count)
 
-                log.info(
-                    f"Updating combined badge count for {notif.user_id}, got {notif.counts.beeper_server_type}: {unread} opposite {BEEPER_SERVER_TYPE_OPPOSITES[notif.counts.beeper_server_type]}: {opposite_count}"
-                )
+                    log.info(
+                        f"Updating combined badge count for {str(notif.user_id)}, "
+                        f"got {notif.counts.beeper_server_type}: {unread} "
+                        f"opposite {BEEPER_SERVER_TYPE_OPPOSITES[notif.counts.beeper_server_type]}: {int(opposite_count)}"
+                    )
 
             root_span_accounted_for = True
 
