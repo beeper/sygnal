@@ -165,7 +165,7 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
         return cls(name, sygnal, config)
 
     async def _perform_http_request(
-        self, body: Dict, headers: Dict[AnyStr, List[AnyStr]]
+        self, body: Dict[str, Any], headers: Dict[AnyStr, List[AnyStr]]
     ) -> Tuple[IResponse, str]:
         """
         Perform an HTTP request to the FCM server with the body and headers
@@ -208,7 +208,7 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
         self,
         n: Notification,
         log: NotificationLoggerAdapter,
-        body: dict,
+        body: Dict[str, Any],
         headers: Dict[AnyStr, List[AnyStr]],
         pushkeys: List[str],
         span: Span,
@@ -408,7 +408,13 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
                     body["registration_ids"] = pushkeys
                     body.pop("to", None)
 
-                log.info("Sending (attempt %i) => %r", retry_number, pushkeys)
+                log.info(
+                    "Sending (attempt %i) => %r room:%s, event:%s",
+                    retry_number,
+                    pushkeys,
+                    n.room_id,
+                    n.event_id,
+                )
 
                 # Beeper: add sent timestamp to notification data payload
                 data["sent_at_timestamp"] = time.time()

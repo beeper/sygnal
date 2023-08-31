@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2019–2020 The Matrix.org Foundation C.I.C.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from sygnal.notifications import ConcurrencyLimitedPushkin
+from typing import Any, Dict, List
+
+from sygnal.notifications import (
+    ConcurrencyLimitedPushkin,
+    Device,
+    Notification,
+    NotificationContext,
+)
 from sygnal.utils import twisted_sleep
 
 from tests.testutils import TestCase
@@ -36,7 +42,9 @@ DEVICE_APNS_EXAMPLE = {
 
 
 class SlowConcurrencyLimitedDummyPushkin(ConcurrencyLimitedPushkin):
-    async def _dispatch_notification_unlimited(self, n, device, context):
+    async def _dispatch_notification_unlimited(
+        self, n: Notification, device: Device, context: NotificationContext
+    ) -> List[str]:
         """
         We will deliver the notification to the mighty nobody
         and we will take one second to do it, because we are slow!
@@ -46,7 +54,7 @@ class SlowConcurrencyLimitedDummyPushkin(ConcurrencyLimitedPushkin):
 
 
 class ConcurrencyLimitTestCase(TestCase):
-    def config_setup(self, config):
+    def config_setup(self, config: Dict[str, Any]) -> None:
         super().config_setup(config)
         config["apps"]["com.example.gcm"] = {
             "type": "tests.test_concurrency_limit.SlowConcurrencyLimitedDummyPushkin",
@@ -57,7 +65,7 @@ class ConcurrencyLimitTestCase(TestCase):
             "inflight_request_limit": 1,
         }
 
-    def test_passes_under_limit_one(self):
+    def test_passes_under_limit_one(self) -> None:
         """
         Tests that a push notification succeeds if it is under the limit.
         """
@@ -65,7 +73,7 @@ class ConcurrencyLimitTestCase(TestCase):
 
         self.assertEqual(resp, {"rejected": []})
 
-    def test_passes_under_limit_multiple_no_interfere(self):
+    def test_passes_under_limit_multiple_no_interfere(self) -> None:
         """
         Tests that 2 push notifications succeed if they are to different
         pushkins (so do not hit a per-pushkin limit).
@@ -76,7 +84,7 @@ class ConcurrencyLimitTestCase(TestCase):
 
         self.assertEqual(resp, {"rejected": []})
 
-    def test_fails_when_limit_hit(self):
+    def test_fails_when_limit_hit(self) -> None:
         """
         Tests that 1 of 2 push notifications fail if they are to the same pushkins
         (so do hit the per-pushkin limit of 1).
