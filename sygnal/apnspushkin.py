@@ -249,12 +249,17 @@ class ApnsPushkin(ConcurrencyLimitedPushkin):
         else:
             device_token = device.pushkey
 
+        is_content_available_push = 'content-available' in shaved_payload.get('aps', {})
+        push_type = PushType.BACKGROUND if is_content_available_push else self.push_type
+
+        log.info(f"Sending as APNs-ID {notif_id} with push_type {push_type}")
+
         request = NotificationRequest(
             device_token=device_token,
             message=shaved_payload,
             priority=prio,
             notification_id=notif_id,
-            push_type=self.push_type,
+            push_type=push_type,
         )
 
         try:
