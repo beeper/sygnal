@@ -2,7 +2,7 @@ name: Beeper Docker image
 
 on:
   push:
-    branches: ["beeper"]
+
 env:
   CI_REGISTRY_IMAGE: "${{ secrets.CI_REGISTRY }}/sygnal"
 
