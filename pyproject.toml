@@ -88,6 +88,7 @@ sentry-sdk = ">=0.10.2"
 service_identity = ">=18.1.0"
 Twisted = ">=19.7"
 zope-interface = ">=5.0.0"
+redis = "4.3.4"
 
 [tool.poetry.group.dev.dependencies]
 black = "==24.3.0"

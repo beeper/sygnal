@@ -452,6 +452,16 @@ class ApnsPushkin(ConcurrencyLimitedPushkin):
         Returns:
             The APNs payload as nested dicts.
         """
+
+        # Short-circuit: If this is a content-available push, then it's just a content-available push
+        if device.data and device.data.get("aps", {}).get("content-available"):
+            return {
+                "aps": {
+                    "content-available": 1
+                }
+            }
+
+
         if not n.sender and not n.sender_display_name:
             from_display = " "
         elif n.sender_display_name is not None:
