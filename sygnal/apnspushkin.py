@@ -177,7 +177,7 @@ class ApnsPushkin(ConcurrencyLimitedPushkin):
                 # max_connection_attempts is actually the maximum number of
                 # additional connection attempts, so =0 means try once only
                 # (we will retry at a higher level so not worth doing more here)
-                apns_client = self.apns_client = APNs(
+                apns_client = APNs(
                     client_cert=certfile,
                     use_sandbox=self.use_sandbox,
                     max_connection_attempts=0,
