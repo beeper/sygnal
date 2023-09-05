@@ -336,7 +336,6 @@ class ApnsPushkin(ConcurrencyLimitedPushkin):
                     "@eric",
                     "@blau",
                     "@robo",
-                    "@blakekarnes",
                     "@janshai",
                     "@michellis",
                     "@wellington",
@@ -454,7 +453,7 @@ class ApnsPushkin(ConcurrencyLimitedPushkin):
         """
 
         # Short-circuit: If this is a content-available push, then it's just a content-available push
-        if device.data and device.data.get("aps", {}).get("content-available"):
+        if device.is_content_available_push():
             return {
                 "aps": {
                     "content-available": 1
