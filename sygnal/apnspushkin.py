@@ -446,9 +446,11 @@ class ApnsPushkin(ConcurrencyLimitedPushkin):
 
         # Short-circuit: If this is a content-available push, then it's just a content-available push
         if device.data and device.data.get("aps", {}).get("content-available"):
-            payload.setdefault("aps", {})
-            payload["aps"]["content-available"] = 1
-            return
+            return {
+                "aps": {
+                    "content-available": 1
+                }
+            }
 
 
         if not n.sender and not n.sender_display_name:
