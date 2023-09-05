@@ -77,6 +77,9 @@ class Device:
         self.data: Optional[Dict[str, Any]] = get_key(raw, "data", dict)
         self.tweaks = Tweaks(get_key(raw, "tweaks", dict, {}))
 
+    def is_content_available_push(self) -> bool:
+        return self.data and self.data.get("aps", {}).get("content-available")
+
 
 class Counts:
     def __init__(self, raw: Dict[str, Any]):
