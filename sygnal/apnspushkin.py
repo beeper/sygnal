@@ -444,7 +444,8 @@ class ApnsPushkin(ConcurrencyLimitedPushkin):
         """
 
         # Short-circuit: If this is a content-available push, then it's just a content-available push
-        if device.is_content_available_push():
+        # HACK(blau): also return content-available for Brandon's test user ID for testing new push strategy on iOS v4
+        if device.is_content_available_push() or n.user_id == "@blauv4:beeper.com":
             return {
                 "aps": {
                     "content-available": 1
