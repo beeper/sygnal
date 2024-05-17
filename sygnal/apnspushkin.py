@@ -273,7 +273,9 @@ class ApnsPushkin(ConcurrencyLimitedPushkin):
             span.set_tag("apns_reason", response.description)
             if (code, response.description) in self.TOKEN_ERRORS:
                 log.info(
-                    "APNs token %s for pushkin %s was rejected: %d %s",
+                    "(Sandbox: %i) Notification request %s with APNs device token %s for pushkin %s was rejected: %d %s",
+                    self.use_sandbox,
+                    notif_id,
                     device_token,
                     self.name,
                     code,
