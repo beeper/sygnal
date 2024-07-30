@@ -85,6 +85,11 @@ http:
   #
   port: 5000
 
+  # Specify the URI of the Redis instance to use. This will be used to
+  # facilitate merging the unread counts from Hungryserv and Synapse when
+  # sending notifications to the user.
+  redis: redis://
+
 ## Proxying for outgoing connections #
 #
 # Specify the URL of a proxy to use for outgoing traffic

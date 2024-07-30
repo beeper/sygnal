@@ -440,7 +440,7 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
                             "Sent GCM push for "
                             "userID=%s, appID=%s, eventID=%s, gcmMessageId=%s"
                         ),
-                        n.user_id,
+                        n.user_id if device else None,
                         device.app_id if device else None,
                         event_id,
                         message_id,
