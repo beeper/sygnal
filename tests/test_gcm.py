@@ -225,6 +225,8 @@ class GcmTestCase(testutils.TestCase):
         self.assertEqual(1, method.call_count)
         notification_req = method.call_args.args
 
+        notification_req[2]["data"].pop("sent_at_timestamp")
+
         self.assertEqual(
             {
                 "data": {
@@ -272,6 +274,8 @@ class GcmTestCase(testutils.TestCase):
 
         self.assertEqual(1, method.call_count)
         notification_req = method.call_args.args
+
+        notification_req[2]["message"]["data"].pop("sent_at_timestamp")
 
         self.assertEqual(
             {
@@ -489,6 +493,8 @@ class GcmTestCase(testutils.TestCase):
         self.assertEqual(3, method.call_count)
         notification_req = method.call_args.args
 
+        notification_req[2]["message"]["data"].pop("sent_at_timestamp")
+
         self.assertEqual(
             {
                 "message": {
@@ -571,6 +577,8 @@ class GcmTestCase(testutils.TestCase):
 
         self.assertEqual(1, method.call_count)
         notification_req = method.call_args.args
+
+        notification_req[2]["message"]["data"].pop("sent_at_timestamp")
 
         # The values for `room_name` & `content_other` should be truncated from the original.
         self.assertEqual(
