@@ -249,7 +249,7 @@ class ApnsPushkin(ConcurrencyLimitedPushkin):
         else:
             device_token = device.pushkey
 
-        is_content_available_push = 'content-available' in shaved_payload.get('aps', {})
+        is_content_available_push = "content-available" in shaved_payload.get("aps", {})
         push_type = PushType.BACKGROUND if is_content_available_push else self.push_type
 
         log.info(f"Sending as APNs-ID {notif_id} with push_type {push_type}")
@@ -456,12 +456,7 @@ class ApnsPushkin(ConcurrencyLimitedPushkin):
 
         # Short-circuit: If this is a content-available push, then it's just a content-available push
         if device.is_content_available_push():
-            return {
-                "aps": {
-                    "content-available": 1
-                }
-            }
-
+            return {"aps": {"content-available": 1}}
 
         if not n.sender and not n.sender_display_name:
             from_display = " "

@@ -432,7 +432,7 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
 
                 # Beeper: debug GCM sends by logging eventId / messageID combintions
                 else:
-                    event_id = body["data"].get("event_id")
+                    event_id = result.get("data", {}).get("event_id")
                     message_id = result.get("message_id")
                     device = pushkey_to_device.get(pushkeys[i])
                     log.info(

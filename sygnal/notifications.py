@@ -76,7 +76,9 @@ class Device:
         self.tweaks = Tweaks(get_key(raw, "tweaks", dict, {}))
 
     def is_content_available_push(self) -> bool:
-        return self.data and self.data.get("aps", {}).get("content-available")
+        if not self.data:
+            return False
+        return self.data.get("aps", {}).get("content-available") is not None
 
 
 class Counts:

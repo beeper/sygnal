@@ -1901,6 +1901,21 @@ files = [
 ]
 
 [[package]]
+name = "types-redis"
+version = "4.6.0.20240726"
+description = "Typing stubs for redis"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "types-redis-4.6.0.20240726.tar.gz", hash = "sha256:de2aefcf7afe80057debada8c540463d06c8863de50b8016bd369ccdbcb59b5e"},
+    {file = "types_redis-4.6.0.20240726-py3-none-any.whl", hash = "sha256:233062b7120a9908532ec9163d17af74b80fa49a89d510444cad4cac42717378"},
+]
+
+[package.dependencies]
+cryptography = ">=35.0.0"
+types-pyOpenSSL = "*"
+
+[[package]]
 name = "types-requests"
 version = "2.32.0.20240712"
 description = "Typing stubs for requests"
@@ -2264,4 +2279,4 @@ test = ["zope.i18nmessageid", "zope.testing", "zope.testrunner"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.0"
-content-hash = "dd41e1f4b385c6914f58bc02debf1d115b56950aa5b43f37d3099944f6470364"
+content-hash = "782416a2e56d58f3b848f392b78668630943676619705cd55bb79d97d5dbd8d4"

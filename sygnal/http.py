@@ -312,7 +312,7 @@ class V1NotifyHandler(Resource):
                     appid,
                     notif.event_id,
                     notif.counts.unread,
-                    d.is_content_available_push()
+                    d.is_content_available_push(),
                 )
 
                 NOTIFS_BY_PUSHKIN.labels(pushkin.name).inc()

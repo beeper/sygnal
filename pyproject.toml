@@ -89,6 +89,7 @@ service_identity = ">=18.1.0"
 Twisted = ">=19.7"
 zope-interface = ">=5.0.0"
 redis = "4.3.4"
+types-redis = "^4.6.0.20240726"
 
 [tool.poetry.group.dev.dependencies]
 black = "==24.3.0"
