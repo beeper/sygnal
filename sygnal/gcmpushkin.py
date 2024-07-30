@@ -511,6 +511,12 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
             log.info("Reg IDs %r get 404 response; assuming unregistered", pushkeys)
             return pushkeys, []
         elif 200 <= response.code < 300:
+            try:
+                resp_object = json_decoder.decode(response_text)
+            except ValueError:
+                resp_object = None
+            # Beeper: log responses
+            log.info("Sent GCM push, response=%r", resp_object)
             return [], []
         else:
             raise NotificationDispatchException(
